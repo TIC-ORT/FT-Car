@@ -1,0 +1,5 @@
+{
+    "board": "arduino:mbed_rp2040:pico",
+    "programmer": "blackmagic",
+    "sketch": "firmwere\\car_firm_v0_1\\car_firm_v0_1.ino"
+}
