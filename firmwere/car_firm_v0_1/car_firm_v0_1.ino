@@ -1,52 +1,59 @@
-// Arduino program to control two motors using a single H-bridge
-// Speed and direction are controlled by a single function
+// Raspberry Pi Pico W - Controller and Receiver using ESP-NOW
+#include <WiFi.h>
+#include <esp_now.h>
+#include <Servo.h>
 
-// Define H-bridge pins
-const int EN_PIN = 9;  // PWM pin to control speed
-const int IN1_PIN = 7; // Direction pin 1
-const int IN2_PIN = 8; // Direction pin 2
+// Servo and Motor Pins (Receiver)
+#define SERVO_PIN 22
+#define MOTOR_L1 2
+#define MOTOR_L2 3
+#define MOTOR_R1 4
+#define MOTOR_R2 5
 
-void setup() {
-    // Set H-bridge pins as outputs
-    pinMode(EN_PIN, OUTPUT);
-    pinMode(IN1_PIN, OUTPUT);
-    pinMode(IN2_PIN, OUTPUT);
+// Control values
+int angle = 90;      // Default angle for the servo
+int throttle = 0;    // Default throttle value
 
-    // Initialize pins to LOW
-    digitalWrite(IN1_PIN, LOW);
-    digitalWrite(IN2_PIN, LOW);
-    analogWrite(EN_PIN, 0);
+Servo servo;
+
+// Structure to hold control data
+typedef struct struct_message {
+    int angle;
+    int throttle;
+} struct_message;
+
+struct_message controlData;
+
+// Callback for receiving data
+void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
+    memcpy(&controlData, incomingData, sizeof(controlData));
+    angle = controlData.angle;
+    throttle = controlData.throttle;
+    servo.write(angle);
+    analogWrite(MOTOR_L1, throttle);
+    analogWrite(MOTOR_R1, throttle);
+    Serial.printf("Received: Angle=%d, Throttle=%d\n", angle, throttle);
 }
 
-// Function to control motor speed and direction
-// speed: positive for forward, negative for reverse, 0 to stop
-void controlMotor(int speed) {
-    if (speed > 0) {
-        // Forward direction
-        digitalWrite(IN1_PIN, HIGH);
-        digitalWrite(IN2_PIN, LOW);
-        analogWrite(EN_PIN, speed);
-    } else if (speed < 0) {
-        // Reverse direction
-        digitalWrite(IN1_PIN, LOW);
-        digitalWrite(IN2_PIN, HIGH);
-        analogWrite(EN_PIN, -speed); // Use absolute value of speed
-    } else {
-        // Stop motor
-        digitalWrite(IN1_PIN, LOW);
-        digitalWrite(IN2_PIN, LOW);
-        analogWrite(EN_PIN, 0);
+
+
+void setup() {
+    Serial.begin(115200);
+    WiFi.mode(WIFI_STA);
+    if (esp_now_init() != ESP_OK) {
+        Serial.println("Error initializing ESP-NOW");
+        return;
     }
+    esp_now_register_recv_cb(OnDataRecv);
+
+    servo.attach(SERVO_PIN);
+    pinMode(MOTOR_L1, OUTPUT);
+    pinMode(MOTOR_L2, OUTPUT);
+    pinMode(MOTOR_R1, OUTPUT);
+    pinMode(MOTOR_R2, OUTPUT);
+    Serial.println("Receiver ready");
+    
 }
 
 void loop() {
-    // Example usage of controlMotor function
-    controlMotor(150); // Move forward at speed 150
-    delay(2000);       // Wait for 2 seconds
-
-    controlMotor(-150); // Move backward at speed 150
-    delay(2000);        // Wait for 2 seconds
-
-    controlMotor(0);    // Stop motor
-    delay(2000);        // Wait for 2 seconds
 }

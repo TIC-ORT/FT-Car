@@ -19,8 +19,7 @@
                 "c:\\users\\manuel\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include\\c++\\7.2.1\\backward",
                 "c:\\users\\manuel\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\lib\\gcc\\arm-none-eabi\\7.2.1\\include",
                 "c:\\users\\manuel\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\lib\\gcc\\arm-none-eabi\\7.2.1\\include-fixed",
-                "c:\\users\\manuel\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include",
-                "C:/Users/Manuel/AppData/Local/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/targets/TARGET_RASPBERRYPI/TARGET_RP2040"
+                "c:\\users\\manuel\\appdata\\local\\arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include"
             ],
             "forcedInclude": [
                 "C:\\Users\\Manuel\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_rp2040\\4.1.5\\cores\\arduino\\Arduino.h"
